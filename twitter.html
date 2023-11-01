@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter</title>
+    <style>
+        body 
+        {
+          background: whitesmoke;
+          height: 100vh;
+         
+        }
+         .logo
+        {
+          height: 250px;
+          width: 300px;
+          margin-top: 180px;
+          margin-left: 150px;
+        }
+        .logobox
+        {
+            bottom: 70px;
+            right: 200px;
+            position: absolute;
+        }
+        form
+        {
+            background: whitesmoke;
+            width: 420px;
+            height: 420px;
+            border-radius: 20px;
+        }
+        .question-page
+        {
+            display: none;
+        }
+        .question-page.active
+        {
+            display: block;
+        }
+       
+        .popup
+        {
+          display: none;
+          position: fixed;
+          top:0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .question-container
+        {
+           background-color: #fff;
+           padding: 40px;
+           border-radius: 10px;
+           width: 500px;
+           height: 500px;
+           max-width: 600px;
+           /* text-align: center; */
+           position: relative;
+           margin-top: 20px;
+        }
+        .button-container
+        {
+            margin-top: 10px;
+        }
+        #questionInput
+        {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .exit-btn
+        {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            outline: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+            padding: 10px 15px;
+            font-weight: bold;
+            display: flex;
+        }
+        .step-indicator
+        {
+            display: flex;
+            font-size: 20px;
+            position: absolute;
+            top: 22px;
+            left: 60px;
+            font-weight: bold;
+            color: #000000;
+        }
+        .login-container button img
+        {
+          width: 18px;
+          margin-right: 10px;
+        }
+        .login-container button
+        {
+            width: 80%;
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            border-radius: 30px;
+            background: transparent;
+            border: 1px solid #999;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .login-container hr
+        {
+            width: 77%;
+            border: 0;
+            height: 1px;
+            background: #c2c2c2;
+            margin: 5px;
+        }.login-container span
+        {
+            display: block;
+            width: 14px;
+            margin:0 160px;
+            background: whitesmoke;
+            font-size: 14px;
+            margin-top: -16px;
+        }
+        form .create-account
+        {
+          background: blue ;
+          color: #fff;
+        }
+        form .create-account:hover
+        {
+            background-color: rgb(2, 2, 63);
+            cursor: pointer;
+        }
+        .signin
+        {
+            color: blue;
+        }
+        .h1
+        {
+          margin-left: 0;
+          color: #000000;
+          font-weight: bold;
+        }
+        .create-account
+        {
+            margin-top: 5px;
+        }
+        .input-container
+        {
+            position: relative;
+            width: calc(100%-80px);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .input-with-count
+        {
+            position:relative;
+        }
+        #nameInput{
+            display: block; 
+            outline: none;
+            padding: 10px;
+            font-size: 16px;
+            width:450px ;
+            margin-left: 0;
+            border-radius: 5px;
+            border:1px solid #ccc ;
+        }
+        #nameInput::placeholder
+        {
+            transition: all 0.3 ease;
+            opacity: 1;
+            font-size: 18px;
+        }
+        #nameInput:focus::placeholder
+        {
+            transform: translateY(-100%);
+            opacity: 1;
+            font-size: 12px;
+            color:#1877f2 ;
+        }
+        .character-count{
+            position: absolute;
+            top: 17px;
+            left: 420px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: black;
+            opacity: 0;
+        }
+        #nameInput:focus 
+        {
+         border: 1.8px solid #1877f2;
+        }
+        #nameInput:focus +.character-count
+        {
+         opacity: 1;
+        }
+        #eInput{
+            display: block;
+            outline: none;
+            padding: 10px;
+            font-size: 16px;
+            width:450px ;
+            margin-left: 0;
+            border-radius: 5px;
+            border:1px solid #ccc ;
+        }
+        #eInput:focus::placeholder
+        {
+            transform: translateY(-100%);
+            opacity: 1;
+            font-size: 12px;
+            color:#1877f2 ;
+        }
+         #eInput:focus 
+        {
+         border: 1.8px solid #1877f2;
+        }
+        #dobInput{
+            display: block;
+            outline: none;
+            padding: 10px;
+            font-size: 16px;
+            width:430px ;
+            margin-left: 0;
+            border-radius: 5px;
+            border:1px solid #ccc ;
+        }
+        .date-select {
+            width: calc(33.33% - 10px);
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .nextBtn{
+            background-color: #ccc;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 470px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 60px;
+        }
+        .nextBtn.active{
+            background-color: #000000;
+        }
+        .step-title{
+            font-size: 17px;
+            font-weight: bold;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-bottom: 20px;
+        }
+       .back-button{
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: none;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+            padding: 0;
+            font-weight: bold;
+       }
+       .checkbox-container{
+         display: inline-block;
+         align-items: center;
+         margin-top: 40px;
+         margin-right: 10px;
+       }
+       .checkbox-label{
+        width: 25px;
+        height: 25px;
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+       }
+       
+       .checkmark{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 25px;
+        height: 25px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        visibility: hidden;
+       }
+       .checkbox-label input:checked + .checkmark
+       {
+         background-color: #007bff;
+       }
+       .popup-content
+       {
+        background: #fff;
+        padding: 0;
+        border-radius: 5px;
+       }
+       .confirmation-container
+       {
+        max-height: 200px;
+        overflow-y: auto;
+       }
+       .confirmation-input
+       {
+        width: calc(100% - 30px);
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 5px;
+            border:1px solid #ccc ;
+            display: inline-block;
+       }
+       .confirmation-input-container{
+        margin-bottom: 3px;
+       }
+       .tickCheckbox
+       {
+        margin-left: -20px;
+        display: inline-block;
+        vertical-align: middle;
+       }
+       .tickCheckbox[type="checkbox"]{
+        width: 20px;
+        height: 20px;
+        right: 10px;
+        border-radius: 50%;
+        color: white;
+        appearance: none;
+        outline: none;
+        cursor: pointer;
+        position: relative;
+       }
+       .tickCheckbox[type="checkbox"]:checked{
+        background-color: #4CAF50;
+       }
+       .tickCheckbox[type="checkbox"]::before{
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 3px;
+        height: 8px;
+        color: white;
+        transform: translate(50%, 50%);
+        border: 2px solid white;
+        border-top: none;
+        border-right: none;
+        opacity: 0;
+        transform-origin: 0% 100%;
+       }
+       .tickCheckbox[type="checkbox"]:checked::before{
+        opacity: 1;
+        transform:translate(-50%, -50%)  rotate(405deg) scaleX(-1);
+       }
+       .confirm-button
+    {
+            background-color: blue;
+            color:#fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 470px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 20px;  
+    }
+    .label-container{
+        color: #333;
+        font-size: 10px;
+        margin-top: -85px;
+        margin-left: 10px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    #passwordInputStep4
+    {
+        width: calc(100% - 34px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        display: inline-block;
+    }
+    #confirmPasswordInput
+    {
+        width: calc(100% - 34px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        display: inline-block;
+    }
+   .error-message
+   {
+    color: red;
+   }
+ </style>
+ <script src="https://apis.google.com/js/platform.js" async defer></script>
+ </head>
+<body>
+     <img src="c:\Users\nnn\Desktop\images\11244080_x_twitter_elon musk_twitter new logo_icon.png" class="logo">
+     <div class="logobox">
+        <h1 style="color: black ; font-size: 50px; font-family: Arial; top: 20px;">Happening now</h1>
+        <h3 style="color: black; font-size: 20px; font-family: Arial;">Join today.</h3>
+        <div id="progress"></div>
+        <div class="login-container">
+            <form id="accountForm"><br>
+                <button type="button" onclick="redirectToGoogleSignIn()"><img src="c:\Users\nnn\Desktop\images\google-logo-9824.png">Sign up with Google</button>
+                <a href="https://appleid.apple.com/" target="_blank" style="text-decoration: none;"><button type="button"><img src="c:\Users\nnn\Desktop\images\png-apple-logo-9723.png">Sign up with apple</button></a>
+                <hr>
+                <span>or</span>
+                <button type="submit" id="createAccountBtn" class="create-account" >Create Account</button>
+                <h6 style="word-spacing: 2px;">By signing up, you agree to the <a href="#" style="text-decoration: none; color: #007bff;">Terms of Service</a> and<a href="#" style="text-decoration: none; color: #007bff;"> Privacy Policy</a><br> including<a href="#" style="text-decoration: none; color: #007bff;"> Cookie Use</a>.</h6>
+                <p style="font-weight: bolder;">Already have an account?</p>
+                <button type="submit" class="signin" id="signInBtn">Sign in</button>
+            </form>
+        </div>
+        
+        <div class="popup" id="popup">
+            <div class="popup-content">
+            <div class="question-container" id="question-container">
+                <div class="step-container" id="step1">
+                    <button id="exitButton" class="exit-btn">x</button>
+                    <div id="stepIndicator" class="step-indicator">Step 1 of 5</div>
+                <div class="h1"><h1>Create your account</h1></div>
+                <div class="input-container"><div class="input-with-count"><input type="text" id="nameInput" placeholder="Name">
+                <div id="nameCharacterCount" class="character-count">0/50</div></div></div>
+                <input type="email" id="eInput" placeholder="Email">
+                <div  id="eErrorMessage" class="error-message"></div>
+                <p style="font-weight: bold; margin-top: 40px;">Date of birth</p>
+                <div style="margin-top: 10px; color: #333; font-weight: 300;">This will not be shown publicly. Confirm your own age, even if this <br>
+                account is for a business, a pet, or something else.</div>
+                <select  id="monthSelect" class="date-select"><option value="">Month</option></select>
+                <select  id="daySelect" class="date-select"><option value="">Day</option></select>
+                <select  id="yearSelect" class="date-select">
+                    <option value="">Year</option>
+                </select>
+                    <button id="nextBtnStep1" class="nextBtn">Next</button>
+            </div>
+                <div class="step-container"  id="step2" style="display: none;">
+                    <div class="step-indicator" id="stepIndicator">Step 2 of 5</div>
+                    <button class="exit-btn" id="previousButton">&#8592; </button>
+                    <div class="step-title"><h1>Customize Your Experience</h1></div>
+                    <div style=" margin-top: 40px;"><h2>Track where you see X content accross the <br> web
+                    </h2></div>
+                    <div><p style="display: inline-block;">X uses this data to personalize your Experience. This web <br> browsing histoty will never be stored with your name, <br> email, or phone number.</p>
+                        <div class="checkbox-container">
+                            <label  class="checkbox-label">
+                             <input type="checkbox" id="agreeCheckbox">
+                             <span class="checkmark"></span></label></div>        
+                    </div>              
+                    <p >By signing up, you agree to our <a href="#" style="text-decoration: none;">Terms</a>, <a href="#" style="text-decoration: none;">Privacy Policy</a>, and <br> <a href="#" style="text-decoration: none;">Cookie Use</a>. X may use your contact information, including your <br> email address and phone number for purposes outlined in our <br> Privacy Policy. <a href="#" style="text-decoration: none;">Learn more</a></p>
+                        <button id="nextBtnStep2" class="nextBtn" >Next</button>
+            </div>
+            <div class="step-container" id="step3" style="display: none;">
+                <div class="step-indicator" id="stepIndicator">Step 3 of 5</div>
+                <button class="exit-btn" id="previousButton">&#8592; </button>
+                <div class="h1"><h1>Create your account</h1></div>
+                <div id="confirmationContainer" class="confirmation-container"></div>
+                <p style="margin-top: 10px;">By signing up, you agree to the <a href="#" style="text-decoration: none;">Terms of Service</a> and <a href="#" style="text-decoration: none;">Privacy Policy</a>,<br>
+                including <a href="#" style="text-decoration: none;">Cookie Use</a>. Twitter may use your contact information, including <br>
+            your email address and phone number for purposes outlined in our <br>Privacy Policy, like keeping your account secure and personalizing our services, including ads. <a href="#" style="text-decoration: none;">Learn more</a>. Others will be able to find you by <br>
+        email or phone number, when provided, unless you choose otherwise <br><a href="#" style="text-decoration: none;">here</a>.</p>
+                <button id="confirmButton" class="confirm-button">Sign Up</button>
+            </div>
+            <div class="step-container" id="step4" style="display: none;">
+                <div class="step-indicator" id="stepIndicator">Step 4 of 5</div>
+                <button class="exit-btn" id="previousButton">&#8592; </button>
+                <div class="h1"><h1>You'll need a password</h1></div>
+                <p>Make sure it's 8 characters or more</p>
+                <input type="password" id="passwordInputStep4" placeholder="Password" class="password1">
+                <div class="error-message" id="passwordError"></div>
+                <button id="nextBtnStep4" class="nextBtn" >Next</button>
+            </div>
+            <div class="step-container" id="step5" style="display: none;">
+                <div class="step-indicator" id="stepIndicator">Step 5 of 5</div>
+                <button class="exit-btn" id="previousButton">&#8592; </button>
+                <div class="h1"><h1>Confirm your password</h1></div>
+                <input type="password" id="confirmPasswordInput" placeholder="Confirm your password" class="password1">
+                <div class="error-message" id="errorMessage"></div>
+                <button id="nextBtnStep5" class="nextBtn" >Next</button>
+            </div>
+            </div>
+            </div></div>
+            <!-- <div class="popup" id="popup2">
+                <div class="popup-content">
+                    <div class="question-container"></div>
+                    <button id="backButton" class="exit-btn">x</button>
+                </div>
+            </div> -->
+        
+     <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            const createAccountBtn = document.getElementById("createAccountBtn");
+            const signInBtn = document.getElementById("signInBtn");
+            const step1 = document.getElementById("step1");
+            const step2 = document.getElementById("step2");
+            const step3 = document.getElementById("step3");
+            const step4 = document.getElementById("step4");
+            const step5 = document.getElementById("step5");
+            const errorMessage = document.getElementById("errorMessage");
+            const confirmPasswordInput= document.getElementById("confirmPasswordInput");
+            const passwordInputStep4= document.getElementById("passwordInputStep4");
+            const passwordError = document.getElementById("passwordError");
+            const confirmationContainer = document.getElementById("confirmationContainer");
+            const confirmButton =document.getElementById("confirmButton");
+            const agreeCheckbox = document.getElementById("agreeCheckbox");
+        const nextBtnStep1= document.getElementById("nextBtnStep1");
+        const nextBtnStep2= document.getElementById("nextBtnStep2");
+        const nextBtnStep3= document.getElementById("nextBtnStep3");
+        const nextBtnStep4= document.getElementById("nextBtnStep4");
+        const nextBtnStep5= document.getElementById("nextBtnStep5");
+        const popup = document.getElementById("popup");
+        const popup2 = document.getElementById("popup2");
+        const stepIndicator = document.getElementById("stepIndicator");
+        const exitButton= document.getElementById("exitButton");
+        const previousButton= document.getElementById("previousButton");
+        const steps = document.querySelectorAll(".step-container");
+        const nameInput = document.getElementById("nameInput");
+        const eInput = document.getElementById("eInput");
+        const eErrorMessage = document.getElementById("eErrorMessage")
+        const nameCharacterCount = document.getElementById("nameCharacterCount")
+        const monthSelect = document.getElementById("monthSelect");
+        const daySelect = document.getElementById("daySelect");
+        const yearSelect = document.getElementById("yearSelect");
+        const MAX_NAME_CHARACTERS =50;
+
+        passwordInputStep4.addEventListener("input", function(){
+            const password = passwordInputStep4.value;
+            if (password.length < 8){
+                passwordError.textContent = "Password must be 8 characters or more.";
+                passwordError.style.display = "block";
+                nextBtnStep4.style.backgroundColor = "#ccc";
+            }else{
+                passwordError.style.display = "none";
+                nextBtnStep4.style.backgroundColor = "#000";
+            }
+            nextBtnStep4.disabled = password.length < 8;
+        });
+        nextBtnStep4.addEventListener("click", function(){
+            if(! nextBtnStep4.disabled){
+                console.log("Password entered:", passwordInputStep4.value);
+                step4.style.display = "none";
+                step5.style.display = "block";
+            }
+        });
+        confirmPasswordInput.addEventListener("input", function(){
+            const confirmPassword = confirmPasswordInput.value;
+            const passwordStep4 = getPasswordFromStep4();
+            const isValid = confirmPassword.length >= 8 && confirmPassword === passwordStep4;
+            nextBtnStep5.disabled = ! isValid;
+            errorMessage.textContent = "";
+            if(confirmPassword.length > 0 && confirmPassword.length < 8){
+                errorMessage.textContent = "Password must be at least 8 characters long";
+            }else if (confirmPassword  !== passwordStep4){
+                errorMessage.textContent = "Password must match the one entered in step 4";
+            }
+            if (confirmPassword === passwordStep4 && confirmPassword.length >= 8){
+                nextBtnStep5.style.backgroundColor= "#000";
+            }else {
+                nextBtnStep5.style.backgroundColor = "#ccc";
+            }
+        });
+        function getPasswordFromStep4(){
+            return document.getElementById("passwordInputStep4").value;
+        }
+
+        nextBtnStep5.addEventListener("click", function(){
+            if(! nextBtnStep5.disabled){
+                console.log("Password entered:", passwordInput.value);
+                step5.style.display = "none";
+                // step5.style.display = "block";
+            }
+        });
+
+        confirmButton.addEventListener("click", function(){
+            step3.style.display ="none";
+            step4.style.display ="block";
+        });
+        
+        nextBtnStep1.disabled = true;
+        nextBtnStep2.disabled = true;
+        // nextBtnStep3.disabled = true;
+        [nameInput, eInput, daySelect, monthSelect, yearSelect].forEach(input =>{
+            input.addEventListener("input",checkStep1Inputs);
+        });
+        function checkStep1Inputs(){
+        const allSectionFilled = nameInput.value.trim() !== "" &&
+        eInput.value.trim() !== "" &&
+        monthSelect.value !== "" &&
+        daySelect.value !== "" &&
+        yearSelect.value !== "" ;
+
+        nextBtnStep1.disabled = ! allSectionFilled;
+        nextBtnStep1.style.backgroundColor = allSectionFilled ? "#000":
+    "#ccc";
+        }
+        agreeCheckbox.addEventListener("change",function(){
+            nextBtnStep2.disabled = ! this.checked;
+        nextBtnStep2.style.backgroundColor = this.checked? "#000":
+    "#ccc";
+        });
+        nextBtnStep1.addEventListener("click", function(){
+            if (! nextBtnStep1.disabled ){
+                step1.style.display = "none";
+                step2.style.display = "block";
+            }
+        });
+        nextBtnStep2.addEventListener("click", function(){
+            if (! nextBtnStep2.disabled ){
+                step2.style.display = "none";
+                step3.style.display = "block";
+                
+            }
+        });
+        nameInput.addEventListener("input",() =>{
+            const currentCharacters = nameInput.value.length;
+            nameCharacterCount.textContent = `${currentCharacters}/${MAX_NAME_CHARACTERS}`;
+            if (currentCharacters > MAX_NAME_CHARACTERS){
+              nameInput.value = nameInput.value.substring(0, MAX_NAME_CHARACTERS);
+              nameCharacterCount.textContent = `${MAX_NAME_CHARACTERS}/${MAX_NAME_CHARACTERS}`;
+            }
+        });
+        const daysInMonth = Array.from({length: 31}, (_, i) => i+1);
+
+        const months =["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        const currentYear = new Date().getFullYear();
+        const years = Array.from({length: 100}, (_,i) => currentYear - i);
+
+       months.forEach((month, index)=> {
+        const option = document.createElement("option"); 
+        option.value = index + 1;
+        option.textContent = month;
+        monthSelect.appendChild(option)
+       });
+        daysInMonth.forEach(day => {
+            const option = document.createElement("option");
+            option.value = day;
+            option.textContent = day;
+            daySelect.appendChild(option);
+        });
+        
+        years.forEach(year => {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            yearSelect.appendChild(option);
+        });
+    
+       
+        exitButton.addEventListener("click", function() {
+            popup.style.display = "none";
+        });
+        previousButton.addEventListener("click", function() {
+            const currentStep = document.querySelector(".step-container: not([style = 'display: none;'])");
+            const previousStep = currentStep.previousElementSibling;
+            if(previousStep){
+                currentStep.style.display ="none";
+                previousStep.style.display ="block;"
+            }
+        });
+
+        createAccountBtn.addEventListener("click",function(){
+            popup.style.display = "flex";
+        });
+        signInBtn.addEventListener("click",function(){
+            popup.style.display = "flex";
+        });
+        eInput.addEventListener("input",function(){
+            const email = eInput.value;
+            const emailRegex = /^[^@\s]+@[^/s]+\.[com]{3}$/;
+            const isValidEmail = emailRegex.test(email);
+            nextBtnStep1.disabled = ! isValidEmail;
+            if(! isValidEmail && email.length > 0){
+                eErrorMessage.textContent = "Please enter a valid email address";
+            }else {
+                eErrorMessage.textContent = "";
+            }
+        });
+
+        confirmButton.disabled = true;
+        const step1Answers = {
+            name:"",
+            email:"",
+            month:"",
+            day:"",
+            year:""
+        };
+        nameInput.addEventListener("input",function(){
+            step1Answers.name = this.value.trim();
+            updateConfirmationContent();
+        });
+        eInput.addEventListener("input",function(){
+            step1Answers.email = this.value.trim();
+            updateConfirmationContent();
+        });
+        monthSelect.addEventListener("input",function(){
+            step1Answers.month = this.value.trim();
+            updateConfirmationContent();
+        });
+        daySelect.addEventListener("input",function(){
+            step1Answers.day = this.value.trim();
+            updateConfirmationContent();
+        });
+        yearSelect.addEventListener("input",function(){
+            step1Answers.year = this.value.trim();
+            updateConfirmationContent();
+        });
+        function updateConfirmationContent(){
+            confirmationContainer.innerHTML = "";
+            for (const key in step1Answers){
+                if (step1Answers[key]){
+                    const inputItem = document.createElement("input");
+                    inputItem.type = "text";
+                    inputItem.value = step1Answers[key];
+                    inputItem.className = "confirmation-input";
+                    const tickCheckbox = document.createElement("input");
+                    tickCheckbox.type = "checkbox";
+                    tickCheckbox.checked = true;
+                    tickCheckbox.className = "tickCheckbox";
+                    const inputContainer = document.createElement("div");
+                    inputContainer.className = "confirmation-input-container";
+                    const labelDiv = document.createElement("div");
+                    labelDiv.className = "label-container";
+                    const label = document.createElement("label");
+                    label.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+                    labelDiv.appendChild(label);
+                    const inputFieldDiv = document.createElement("div");
+                    inputFieldDiv.className = "input-field-container";
+                    inputFieldDiv.appendChild(inputItem);
+                    inputFieldDiv.appendChild(tickCheckbox);
+                    inputContainer.appendChild(inputFieldDiv);
+                    // inputContainer.appendChild(inputItem);
+                    inputContainer.appendChild(labelDiv)
+                    // inputContainer.appendChild(tickCheckbox);
+                    confirmationContainer.appendChild(inputContainer);
+                 }
+            }
+            confirmButton.disabled = Object.values(step1Answers).some(value => value ==="");
+        }
+        updateConfirmationContent();
+        });
+       
+       
+           function redirectToGoogleSignIn(){
+            var clientId =  '450908594972-98lc5450den3gbfd4p8ka4nk19q8795c.apps.googleusercontent.com';
+            var redirectUri = 'http://localhost:3000/oauth2callback'
+            var googleSignInUrl ='https://accounts.google.com/o/oauth2/auth' 
+            + '?client_id=' + clientId
+            + '&redirect_uri=' + redirectUri
+            + '&scope=email profile'
+            + '&response_type=code'
+            
+            window.location.href = googleSignInUrl;
+        }
+ 
+     </script>
+    </body>
+</html>
